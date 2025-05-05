@@ -1,19 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
-using SpecimenNew.Utils;
-using UnityEngine.Diagnostics;
 
-public class EnemyAINEW : MonoBehaviour
+public class Shooter : MonoBehaviour
 {
     [SerializeField] private State startingState;
     [SerializeField] private float roamingDistanceMax = 7f;
     [SerializeField] private float roamingDistanceMin = 3f;
     [SerializeField] private float roamingTimerMax = 2f;
 
-    //[SerializeField] private GameObject projectilePrefab;
+    [SerializeField] private GameObject projectilePrefab;
 
     [SerializeField] private float attackRange = 5f;
     [SerializeField] private float attackCD = 2f;
@@ -41,7 +38,6 @@ public class EnemyAINEW : MonoBehaviour
     }
     private void Update()
     {
-        //FlipSprite();
         switch (state)
         {
             default:
@@ -52,9 +48,6 @@ public class EnemyAINEW : MonoBehaviour
                     Roaming();
                     roamingTime = roamingTimerMax;
                 }
-                break;
-            case State.Attacking:
-                //Attacking();
                 break;
         }
     }
@@ -70,28 +63,21 @@ public class EnemyAINEW : MonoBehaviour
         startingPosition = transform.position;
         roamPosition = GetRoamingPosition();
         navMeshAgent.SetDestination(roamPosition);
-        //FlipSprite();
+        if (Vector2.Distance(transform.position, Movement.Instance.transform.position) > attackRange)
+        {
+            state = State.Roaming;
+        }
+        if (attackRange != 0 && canAttack)
+        {
+            canAttack = false;
+            Attack();
+            StartCoroutine(AttackCDRoutine());
+        }
     }
-    //private void Attacking()
-    //{
-    //    if (Vector2.Distance(transform.position, Movement.Instance.transform.position) > attackRange)
-    //    {
-    //        state = State.Roaming;
-    //    }
-    //    if (attackRange != 0 && canAttack)
-    //    {
-    //        canAttack = false;
-    //        Attack();
-    //        StartCoroutine(AttackCDRoutine());
-    //    }
-    //}
-    //private void Attack()
-    //{
-    //    Vector2 target = Movement.Instance.transform.position - transform.position;
-
-    //    GameObject newProjectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
-    //    newProjectile.transform.right = target;
-    //}
+    private void Attack()
+    {
+        Instantiate(projectilePrefab, transform.position, Quaternion.identity);
+    }
     private IEnumerator AttackCDRoutine()
     {
         yield return new WaitForSeconds(attackCD);
@@ -120,5 +106,4 @@ public class EnemyAINEW : MonoBehaviour
     {
         return startingPosition + SpecimenNew.Utils.Utils.GetRandomDir() * Random.Range(roamingDistanceMin, roamingDistanceMax);
     }
-
 }

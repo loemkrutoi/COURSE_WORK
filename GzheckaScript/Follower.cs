@@ -6,10 +6,10 @@ public class Follower : MonoBehaviour
 {
     public GameObject followChar;
     private Vector2 direction;
-    //public Animator animator;
+    public Animator animator;
     public float followDistance = 1f;
     public List<Vector2> followCharPos = new List<Vector2>();
-    public float allowableSampleDistance = 0.05f;
+    public float allowableSampleDistance = 0f;
     private float sampleTimeDifference;
     float sampleTime;
     public float removeDistance = 1f;
@@ -17,10 +17,10 @@ public class Follower : MonoBehaviour
     public float normalSpeed = 4f;
     public float followSpeed = 4f;
     public float fastDistance = 2f;
-
     private void Awake()
     {
         followChar = GameObject.FindWithTag("Player");
+        animator = GetComponent<Animator>();
     }
     private void Start()
     {
@@ -28,15 +28,14 @@ public class Follower : MonoBehaviour
         followCharPos.Add(followChar.transform.position);
         followSpeed = fastSpeed;
     }
-
     private void Update()
     {
         direction.x = Input.GetAxisRaw("Horizontal");
         direction.y = Input.GetAxisRaw("Vertical");
 
-        //animator.SetFloat("Horizontal", direction.x);
-        //animator.SetFloat("Vertical", direction.y);
-        //animator.SetFloat("Speed", direction.sqrMagnitude);
+        animator.SetFloat("Horizontal", direction.x);
+        animator.SetFloat("Vertical", direction.y);
+        animator.SetFloat("Speed", direction.sqrMagnitude);
 
         if (Time.time > sampleTime)
         {

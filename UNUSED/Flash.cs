@@ -19,9 +19,9 @@
 //    }
 //    public IEnumerator FlashRoutine()
 //    {
-//        //spriteRenderer.material = flashMaterial;
+//        spriteRenderer.material = flashMaterial;
 //        yield return new WaitForSeconds(restoreDefaultMaterial);
-//        //spriteRenderer.material = defaultMaterial;
-//        enemyHealth.DetectDeath();
+//        spriteRenderer.material = defaultMaterial;
+//        //enemyHealth.DetectDeath();
 //    }
 //}

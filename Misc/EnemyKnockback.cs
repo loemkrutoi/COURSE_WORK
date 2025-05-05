@@ -14,12 +14,11 @@ public class EnemyKnockback : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
     }
-
     public void GetKnockedBack(Transform damageSource, float knockbackThrust)
     {
         gettingKnockedBack = true;
-        Vector2 differrence = (transform.position - damageSource.position).normalized * knockbackThrust * rb.mass;
-        rb.AddForce(differrence, ForceMode2D.Impulse);
+        Vector2 differrence = knockbackThrust * rb.mass * (transform.position - damageSource.position).normalized;
+        rb.AddForce(differrence, ForceMode2D.Impulse); 
         StartCoroutine(KnockRoutine());
     }
     private IEnumerator KnockRoutine()
